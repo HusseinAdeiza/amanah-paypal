@@ -1,10 +1,10 @@
 services:
   - type: web
     name: amanah
-    runtime: node
+    runtime: docker
     plan: free
-    buildCommand: pnpm install && pnpm run build
-    startCommand: node agent/dist/server.js
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/state
     envVars:
       - key: NODE_ENV
