@@ -1,4 +1,5 @@
 import express from "express";
+import { existsSync } from "fs";
 import { config } from "./lib/config.js";
 import { initSchema, run, all, get } from "./lib/db.js";
 import { makeMoneyProvider } from "./money/index.js";
@@ -18,6 +19,13 @@ async function main() {
   const app = express();
   app.use(express.json());
   app.use((_req, res, next) => { res.set("Access-Control-Allow-Origin", "*"); res.set("Access-Control-Allow-Headers", "Content-Type"); next(); });
+
+  // Serve the built dashboard (single deployable service: API + UI on one port).
+  // Built via `pnpm --filter @amanah/web run build` -> web/dist, copied next to dist.
+  const webDist = new URL("../../web/dist/", import.meta.url).pathname;
+  if (existsSync(webDist)) {
+    app.use(express.static(webDist));
+  }
 
   app.get("/api/state", async (_req, res) => {
     res.json({ provider: provider.name(), dryRun: config.dryRun, treasuryUsd: await provider.getTreasuryUsd(), guardrails: config.guardrails, summary: await audit.getTreasurySummary() });
@@ -65,6 +73,14 @@ async function main() {
   };
   await seed();
 
-  app.listen(config.port, () => console.log(`Amanah agent API on http://localhost:${config.port} (dryRun=${config.dryRun})`));
+  // SPA fallback: any non-API route serves the dashboard (so / works and refreshes don't 404).
+  const webIndex = new URL("../../web/dist/index.html", import.meta.url).pathname;
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api/")) return next();
+    if (existsSync(webIndex)) return res.sendFile(webIndex);
+    res.status(200).send("Amanah API running. Build the dashboard with `pnpm --filter @amanah/web run build` to serve the UI.");
+  });
+
+  app.listen(config.port, () => console.log(`Amanah running on http://localhost:${config.port} (dryRun=${config.dryRun}, dashboard served from same port)`));
 }
 main().catch((e) => { console.error(e); process.exit(1); });

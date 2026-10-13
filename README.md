@@ -8,6 +8,25 @@ written to a **hash-chained, IPFS-pinnable audit trail** anyone can verify.
 > The core safety idea: **the AI recommends, the rules constrain, but money only moves
 > when a human confirms — and every movement is provable.** No autonomous transfer, ever.
 
+## 🔗 Try it live (no setup)
+
+**Live demo:** https://arnold-incurred-based-survival.trycloudflare.com
+
+Open it in any browser — the dashboard and API run together on one service, no keys or
+install needed. It runs in **DRY-RUN** mode (simulated PayPal, real mechanics), so it's
+safe to click through. Try this:
+
+1. **Donate** — enter a donor name + amount, click **Receive**. Watch the treasury climb
+   and a new row appear in the audit trail.
+2. **Run AI + rules** — click it. The AI reasoner evaluates the treasury against program
+   budgets and a reserve floor, and the rules engine files **proposals** (with reasons).
+   Nothing moves yet.
+3. **Confirm & pay** — click it on a proposal. This is the **only** path that executes a
+   payout. Watch the proposal flip to *executed* and a new receipt land in the chain.
+4. **Verify** — the audit trail is hash-chained; every receipt links to the previous one.
+
+*(The tunnel URL is ephemeral — if it's down, run it locally with the 3 commands below.)*
+
 ---
 
 ## The 30-second version
@@ -78,9 +97,12 @@ Programs ◄── PayPal Payouts ◄── Human gate (confirm/reject)
 pnpm install
 pnpm run build
 pnpm run demo          # full loop in ~10s, dry-run, no keys needed
-# dashboard:
-pnpm run dev           # agent API :4000, dashboard :5173
+# single service (API + dashboard on one port):
+pnpm --filter @amanah/agent run dev   # http://localhost:4000
 ```
+
+The agent serves the built dashboard from the same port, so `pnpm --filter @amanah/agent
+run dev` is all you need — API and UI together on :4000.
 
 To go live (PayPal sandbox): copy `.env.example` to `agent/.env`, set
 `PAYPAL_CLIENT_ID`/`PAYPAL_CLIENT_SECRET` and `DRY_RUN=false`. Get sandbox creds at
