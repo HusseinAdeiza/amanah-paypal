@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "dev": "node dist/server.js",
     "demo": "node dist/demo.js",
-    "cli": "node dist/cli.js"
+    "cli": "node dist/cli.js",
+    "start": "bash start.sh"
   },
   "dependencies": {
     "@amanah/receipts": "workspace:*",

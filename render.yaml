@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: amanah
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm run build
+    startCommand: node agent/dist/server.js
+    healthCheckPath: /api/state
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DRY_RUN
+        value: "true"
+      - key: PORT
+        value: "10000"
