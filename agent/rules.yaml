@@ -1,0 +1,26 @@
+version: "2.0"
+# Amanah protection rules. These do NOT move money — they generate proposals that a
+# human must confirm, and the AI reasoner's recommendation is always capped by these
+# and by config.guardrails (maxSinglePayoutUsd / minReserveUsd).
+rules:
+  - id: health-underfunded
+    name: "Top up the Health program when it is underfunded"
+    enabled: true
+    condition:
+      type: program_underfunded
+      program: Health
+    action:
+      type: disburse
+      toProgram: Health
+      amount: need
+
+  - id: surplus-hold
+    name: "Propose disbursing surplus above a threshold (never auto-sent)"
+    enabled: true
+    condition:
+      type: treasury_above
+      minUsd: 13000
+    action:
+      type: disburse
+      toProgram: Education
+      amount: all_above_reserve
