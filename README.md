@@ -10,22 +10,23 @@ written to a **hash-chained, IPFS-pinnable audit trail** anyone can verify.
 
 ## 🔗 Try it live (no setup)
 
-**Live demo:** https://arnold-incurred-based-survival.trycloudflare.com
+**Live demo (durable):** https://amanah-gijy.onrender.com
 
 Open it in any browser — the dashboard and API run together on one service, no keys or
 install needed. It runs in **DRY-RUN** mode (simulated PayPal, real mechanics), so it's
 safe to click through. Try this:
 
-1. **Donate** — enter a donor name + amount, click **Receive**. Watch the treasury climb
+1. **Donate** — enter a donor name + amount, click **Receive donation**. Watch the treasury climb
    and a new row appear in the audit trail.
-2. **Run AI + rules** — click it. The AI reasoner evaluates the treasury against program
+2. **Run AI + rules** — click it (in the AI Analysis panel). The AI reasoner evaluates the treasury against program
    budgets and a reserve floor, and the rules engine files **proposals** (with reasons).
    Nothing moves yet.
 3. **Confirm & pay** — click it on a proposal. This is the **only** path that executes a
    payout. Watch the proposal flip to *executed* and a new receipt land in the chain.
 4. **Verify** — the audit trail is hash-chained; every receipt links to the previous one.
 
-*(The tunnel URL is ephemeral — if it's down, run it locally with the 3 commands below.)*
+*Hosted on Render (free tier) — the first load after idle takes ~15–30s to wake the instance,
+then it's fast. Runs in DRY-RUN: simulated PayPal, real AI/rules/gate/hash-chain mechanics.*
 
 ---
 
